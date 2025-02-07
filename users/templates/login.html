@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-md w-96">
+        <h2 class="text-2xl font-semibold text-center text-green-600 mb-4">Login</h2>
+        <form method="post" class="space-y-4" autocomplete="off">
+            {% csrf_token %}
+
+            {% if form.errors %}
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded-md">
+                    <strong>Invalid Credentials!</strong> Please check your username and password.
+                </div>
+            {% endif %} 
+            
+            <div>
+                <label for="username_field" class="block text-sm font-medium text-gray-700">Username</label>
+                <input type="text" name="username" autocomplete="off"  id="username_field" class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-green-500 focus:border-green-500" value="" autocomplete="new-username" required>
+            </div>
+        
+            <div>
+                <label for="password_field" class="block text-sm font-medium text-gray-700">Password</label>
+                <input type="password" name="password" id="password_field" autocomplete="new-password" class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-green-500 focus:border-green-500" value="" autocomplete="new-password" required>
+            </div>
+        
+            <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700" formnovalidate>Login</button>
+        </form>
+        
+        </form>
+        <p class="mt-4 text-center text-gray-600">Don't have an account? 
+            <a href="{% url 'register' %}" class="text-green-500 hover:underline">Register</a>
+        </p>
+    </div>
+</body>
+<script>
+    window.onload = function() {
+        document.getElementById("id_username").value = "";
+        document.getElementById("id_password").value = "";
+    };
+</script>
+</html>

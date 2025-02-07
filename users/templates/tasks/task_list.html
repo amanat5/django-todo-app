@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto p-6 bg-blue-100">
+    <div class="text-right mb-6 -mr-20">
+        <a href="{% url 'logout' %}" class="bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-red-700 transition-all duration-300 transform hover:scale-105">Logout</a>
+    </div>
+    <h2 class="text-4xl font-semibold text-green-600 mb-8 -ml-20 -mt-20 text-center">Task List</h2>
+    <div class="flex justify-center mb-6">
+        <form method="GET" class="flex items-center space-x-4">
+            <input type="text" name="search" placeholder="Search tasks..." class="p-3 border border-gray-300 rounded-lg shadow-md focus:ring-2 focus:ring-green-500 transition duration-300" value="{{ request.GET.search }}">
+            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white p-3 rounded-lg shadow-md transition duration-200 transform hover:scale-105">Search</button>
+        </form>
+    </div>
+    <div class="text-center mb-8">
+        <a href="{% url 'create_task' %}" class="bg-green-600 text-white px-6 py-3 -ml-20 rounded-lg shadow-lg hover:bg-green-700 transition-all duration-300 transform hover:scale-105 ml-4">Add Task</a>
+    </div>
+    <ul class="space-y-4">
+        {% for task in tasks %}
+        <li class="p-6 bg-white border rounded-lg shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 {% if task.completed %}bg-gray-200{% endif %}">
+            <div class="flex justify-between items-center">
+                <a href="{% url 'task_detail' task.id %}" class="text-2xl font-semibold text-gray-800 hover:text-green-600 transition duration-300">{{ task.title }}</a>
+                <p class="text-sm text-gray-500">{{ task.created_at }}</p>
+            </div>
+            <p class="mt-2 text-gray-600">{{ task.description }}</p>
+
+            <div class="mt-4 flex items-center justify-between">
+                <a href="{% url 'update_task' task.id %}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-200 transform hover:scale-105">Edit</a>
+                <form method="POST" action="{% url 'delete_task' task.id %}" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition duration-200 transform hover:scale-105">Delete</button>
+                </form>
+                <form method="POST" action="{% url 'update_task' task.id %}" class="inline">
+                    {% csrf_token %}
+                    <input type="hidden" name="completed" value="{% if task.completed %}False{% else %}True{% endif %}">
+                    <button type="submit" class="ml-2 {% if task.completed %}bg-yellow-500 hover:bg-yellow-600{% else %}bg-green-500 hover:bg-green-600{% endif %} text-white px-4 py-2 rounded-lg transition duration-200 transform hover:scale-105">
+                        {% if task.completed %}Mark as Pending{% else %}Mark as Completed{% endif %}
+                    </button>
+                </form>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
